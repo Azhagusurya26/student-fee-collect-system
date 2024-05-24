@@ -1,5 +1,6 @@
 package com.student.studentfeecollectsystem.dtos;
 
+
 public class StudentUpdateRequestDto {
     private Long id;
 
@@ -7,12 +8,24 @@ public class StudentUpdateRequestDto {
 
     private String mobileNumber;
 
+    private String grade;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "StudentUpdateRequestDto{" +
+                "id=" + id +
+                ", studentName='" + studentName + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
+                ", grade='" + grade + '\'' +
+                '}';
     }
 
     public String getStudentName() {
@@ -29,5 +42,13 @@ public class StudentUpdateRequestDto {
 
     public void setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 }

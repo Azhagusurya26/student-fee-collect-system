@@ -38,19 +38,19 @@ public class StudentControllers {
         return studentService.createStudent(studentRequestDto);
     }
 
-    @Operation(summary = "create Student")
+    @Operation(summary = "update Student")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
-                    description = "created student")})
+                    description = "updated student")})
     @PutMapping("/{studentId}")
-    public ResponseEntity<String> updateStudent(@PathVariable Long studentID, @RequestBody StudentUpdateRequestDto studentUpdateRequestDto) throws InvalidUpdateRequestFoundException, StudentNotFoundException {
+    public ResponseEntity<String> updateStudent(@PathVariable("studentId") Long studentID, @RequestBody StudentUpdateRequestDto studentUpdateRequestDto) throws InvalidUpdateRequestFoundException, StudentNotFoundException {
         return studentService.updateStudent(studentID, studentUpdateRequestDto);
     }
 
-    @Operation(summary = "update Student details")
+    @Operation(summary = "get Student details")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
-                    description = "update student details for given id",
+                    description = "get student details for given id",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Page.class)) }),
             @ApiResponse(responseCode = "404",

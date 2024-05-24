@@ -7,6 +7,8 @@ import com.student.studentfeecollectsystem.exception.StudentNotFoundException;
 import com.student.studentfeecollectsystem.repository.SemesterRepository;
 import com.student.studentfeecollectsystem.repository.ReceiptRepository;
 import com.student.studentfeecollectsystem.repository.StudentsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,9 @@ import static com.student.studentfeecollectsystem.enums.StudentErrorConstants.ST
 
 @Service
 public class FeeCollectServiceImpl implements FeeCollectorService {
+
+    Logger logger = LoggerFactory.getLogger(FeeCollectServiceImpl.class);
+
 
     private final ReceiptRepository receiptRepository;
 
@@ -46,6 +51,7 @@ public class FeeCollectServiceImpl implements FeeCollectorService {
             receipt.setStudent(student.get());
             Receipt savedReceipt = receiptRepository.save(receipt);
             ReceiptResponseDto receiptResponseDto = buildReceiptResponse(grade.get(), student.get(), savedReceipt);
+            logger.debug("fee collected for the student id {} amount: {} for the semester {}", student.get().getStudentID(), feeRequestDto.getFeeAmount(), feeRequestDto.getSemesterId());
             return ResponseEntity.ok(receiptResponseDto);
         }
         throw new InvalidFeeRequestDetailsFound(HttpStatus.BAD_REQUEST, "Invalid Fee request details");

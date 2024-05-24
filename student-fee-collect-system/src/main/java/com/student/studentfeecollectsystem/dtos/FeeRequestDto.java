@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FeeRequestDto {
 
-
     private Long studentID;
 
     private Double feeAmount;
@@ -34,5 +33,14 @@ public class FeeRequestDto {
 
     public void setSemesterId(String semesterId) {
         this.semesterId = semesterId;
+    }
+
+    @Override
+    public String toString() {
+        return "FeeRequestDto{" +
+                "studentID=" + studentID +
+                ", feeAmount=" + feeAmount +
+                ", semesterId='" + semesterId + '\'' +
+                '}';
     }
 }

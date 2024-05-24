@@ -65,4 +65,16 @@ public class ReceiptResponseDto {
     public void setSemester(String semester) {
         this.semester = semester;
     }
+
+    @Override
+    public String toString() {
+        return "ReceiptResponseDto{" +
+                "studentID=" + studentID +
+                ", studentName='" + studentName + '\'' +
+                ", semester='" + semester + '\'' +
+                ", feeAmount=" + feeAmount +
+                ", receiptID=" + receiptID +
+                ", paymentDoneOn=" + paymentDoneOn +
+                '}';
+    }
 }

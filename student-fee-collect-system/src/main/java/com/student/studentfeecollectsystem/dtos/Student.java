@@ -2,14 +2,22 @@ package com.student.studentfeecollectsystem.dtos;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GenericGenerator(name="generator", strategy="increment")
+    @GeneratedValue(generator="generator")
     @Column(name = "student_id")
     private Long studentID;
 
@@ -29,7 +37,7 @@ public class Student {
     @Column(name = "student_grade")
     private String grade;
 
-    @OneToMany(targetEntity=Receipt.class,cascade = CascadeType.ALL , fetch = FetchType.LAZY, mappedBy = "student")
+    @OneToMany(targetEntity=Receipt.class,cascade = CascadeType.DETACH , fetch = FetchType.LAZY, mappedBy = "student")
     private List<Receipt> receiptList;
 
     public String getStudentName() {

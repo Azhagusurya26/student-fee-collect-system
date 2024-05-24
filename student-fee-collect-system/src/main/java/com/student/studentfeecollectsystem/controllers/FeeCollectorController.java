@@ -14,10 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,8 +37,8 @@ public class FeeCollectorController {
             @ApiResponse(responseCode = "404",
                     description = "No Student details found for the Id",
                     content = @Content)})
-    @PostMapping("/collectFee")
-    public ResponseEntity<ReceiptResponseDto> collectFee(FeeRequestDto feeRequestDto) throws InvalidFeeRequestDetailsFound {
+    @PostMapping("/v1/collectFee")
+    public ResponseEntity<ReceiptResponseDto> collectFee(@RequestBody FeeRequestDto feeRequestDto) throws InvalidFeeRequestDetailsFound {
         return feeCollectorService.collectFee(feeRequestDto);
     }
 
@@ -68,7 +65,7 @@ public class FeeCollectorController {
             @ApiResponse(responseCode = "404",
                     description = "No Student details found for the student Id",
                     content = @Content)})
-    @GetMapping("/Receipts/{studentId}")
+    @GetMapping("/Receipts/student/{studentId}")
     public ResponseEntity<List<ReceiptResponseDto>> getReceiptDetailsForStudent(@PathVariable("studentId") Long studentId) throws InvalidFeeRequestDetailsFound, StudentNotFoundException, NoReceiptFoundException {
         return feeCollectorService.getReceiptsByStudentId(studentId);
     }

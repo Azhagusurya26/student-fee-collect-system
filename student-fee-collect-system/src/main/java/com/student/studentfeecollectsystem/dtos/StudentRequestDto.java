@@ -2,7 +2,6 @@ package com.student.studentfeecollectsystem.dtos;
 
 public class StudentRequestDto {
 
-    private Long studentID;
 
     private String studentName;
 
@@ -54,11 +53,4 @@ public class StudentRequestDto {
         this.semesterId = semesterId;
     }
 
-    public Long getStudentID() {
-        return studentID;
-    }
-
-    public void setStudentID(Long studentID) {
-        this.studentID = studentID;
-    }
 }

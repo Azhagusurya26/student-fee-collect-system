@@ -10,6 +10,8 @@ import com.student.studentfeecollectsystem.exception.SemesterNotFoundException;
 import com.student.studentfeecollectsystem.exception.StudentNotFoundException;
 import com.student.studentfeecollectsystem.repository.SemesterRepository;
 import com.student.studentfeecollectsystem.repository.StudentsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,8 @@ import static com.student.studentfeecollectsystem.enums.StudentErrorConstants.ST
 
 @Service
 public class StudentServiceImpl implements StudentService {
+
+    Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
 
     private StudentsRepository studentsRepository;
 
@@ -39,13 +43,18 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public ResponseEntity<String> createStudent(StudentRequestDto studentRequestDto) throws SemesterNotFoundException {
-        Student student = objectMapper.convertValue(studentRequestDto, Student.class);
+        Student student = new Student();
+        student.setStudentName(studentRequestDto.getStudentName());
+        student.setMobileNumber(studentRequestDto.getMobileNumber());
+        student.setGrade(studentRequestDto.getGrade());
+        student.setSchoolName(studentRequestDto.getSchoolName());
         Optional<Semester> semester = semesterRepository.findById(studentRequestDto.getSemesterId());
         if(semester.isEmpty()){
             throw new SemesterNotFoundException(HttpStatus.BAD_REQUEST, "Invalid semester Id in the request");
         }
         student.setSemester(semester.get());
         studentsRepository.save(student);
+        logger.debug("successfully created the student {}", student.toString());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -53,6 +62,7 @@ public class StudentServiceImpl implements StudentService {
     public ResponseEntity<Student> getStudentDetails(String studentId) throws StudentNotFoundException {
         Optional<Student> student = studentsRepository.findById(Long.valueOf(studentId));
         if (student.isPresent()) {
+            logger.debug("successfully retrieved the student {}", student.toString());
             return ResponseEntity.ok(student.get());
         }
         throw new StudentNotFoundException(STUDENT_NOT_FOUND.getHttpStatus(), STUDENT_NOT_FOUND.getMessage());
@@ -77,8 +87,15 @@ public class StudentServiceImpl implements StudentService {
             if (studentUpdateRequestDto.getMobileNumber() != null) {
                 updateStudent.setMobileNumber(studentUpdateRequestDto.getMobileNumber());
             }
+            if (studentUpdateRequestDto.getGrade() != null) {
+                updateStudent.setGrade(studentUpdateRequestDto.getGrade());
+            }
             studentsRepository.save(updateStudent);
+            logger.debug("successfully updated the student {}", student.toString());
+
+            return ResponseEntity.ok().build();
         }
+        logger.error("request has mismatch ids");
         throw new InvalidUpdateRequestFoundException(HttpStatus.BAD_REQUEST, "mismatch in the student id");
     }
 
@@ -88,6 +105,7 @@ public class StudentServiceImpl implements StudentService {
         if (!studentsRepository.existsById(studentID)) {
             throw new StudentNotFoundException(STUDENT_NOT_FOUND.getHttpStatus(), STUDENT_NOT_FOUND.getMessage());
         }
+        logger.debug("deleted the record for student id {}", studentID);
         studentsRepository.deleteById(studentID);
     }
 
